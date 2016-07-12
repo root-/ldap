@@ -242,7 +242,11 @@ func (l *Conn) processMessages() {
 	for {
 		select {
 		case l.chanMessageID <- messageID:
-			messageID++
+			if messageID > 100 {
+				messageID = 1
+			} else {
+				messageID++
+			}
 		case messagePacket, ok := <-l.chanMessage:
 			if !ok {
 				l.Debug.Printf("Shutting down - message channel is closed")
